@@ -1,0 +1,23 @@
+{
+  "name": "readme-generator",
+  "version": "1.0.0",
+  "description": "readMe generator for github",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santanam23/readMe-generator.git"
+  },
+  "author": "Miriam Santana",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/santanam23/readMe-generator/issues"
+  },
+  "homepage": "https://github.com/santanam23/readMe-generator#readme",
+  "dependencies": {
+    "inquirer": "^8.2.0"
+  },
+  "keywords": []
+}
