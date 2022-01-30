@@ -1,126 +1,146 @@
-const inquirer =require('inquirer');
-const fs = require('fs');
-const { ifAnsweredThenAddText, addTableofContents, ifAnsweredBasicsThenAddText, getLicenseText, getLicenseBadge, addReconciledBadges } = require("./helpers/helpers.js");
+// require modules 
+const fs = require('fs'); 
+const inquirer = require('inquirer'); 
 
+// linking to page where the README is developed 
+const generatePage = require('./utils/generateReadme.js');
 
-const questions = [
-        {
-            type: "input",
-            name: "title",
-            message: "What is the project title?"
-        },
-        {
-            type: "input",
-            name: "description",
-            message: "Write a brief description of your project: "
-        },
-        {
-            type: "input",
-            name: "installation",
-            message: "Describe the installation process if any: "
-        },
-        {
-            type: "input",
-            name: "usage",
-            message: "What is this project usage for?"
-        },
-        {
-            type: "list",
-            name: "license",
-            message: "What is the icense for this project: ",
-            choices: [
-                "Apache",
-                "Academic",
-                "GNU",
-                "ISC",
-                "MIT",
-                "Mozilla",
-                "Open"
-            ]
-        },
-        {
-            type: "input",
-            name: "contributors",
-            message: "Who are the contributors of this projects?"
-        },
-        {
-            type: "input",
-            name: "tests",
-            message: "Is there a test included?"
-        },
-        {
-            type: "input",
-            name: "questions",
-            message: "What do I do if I have an issue? "
-        },
-        {
-            type: "input",
-            name: "Github username",
-            message: "Please enter your GitHub username: "
-        },
-        {
-            type: "input",
-            name: "email",
-            message: "Please enter your email: "
+// array of questions for user
+const questions = () => {
+    // using inquirer to prompt questions to user 
+    return inquirer.prompt([
+    {
+        type: 'input',
+        name: 'github',
+        message: 'What is your GitHub username?',
+        validate: nameInput => {
+            if (nameInput) {
+                return true;
+            } else {
+                console.log('Please enter your GitHub username!');
+                return false; 
+            }
+        } 
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'What is your email address?',
+        validate: nameInput => {
+            if (nameInput) {
+                return true;
+            } else {
+                console.log('Please enter your email address!');
+                return false; 
+            }
         }
-    ];
-    global.answers = {};
 
-    const generateReadMe = answers => {
-
-        // Make answers accessible at this level
-        let {
-            title,
-            description,
-            installation,
-            usage,
-            license,
-            contribution,
-            tests,
-            questions,
-            githubUsername,
-            email
+    },
+    {
+        type: 'input',
+        name: 'title',
+        message: 'What is your project name?',
+        validate: nameInput => {
+            if (nameInput) {
+                return true;
+            } else {
+                console.log('Please enter your project name!');
+                return false; 
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'description',
+        message: 'Please write a short description of your project.',
+        validate: nameInput => {
+            if (nameInput) {
+                return true;
+            } else {
+                console.log('Please enter a description of your project!');
+                return false; 
+            }
+        }
+    }, 
+    {
+        type: 'list',
+        name: 'license',
+        message: 'What kind of license does your project have?',
+        choices: [ 
+        "Apache",
+        "Academic",
+        "GNU",
+        "ISC",
+        "MIT",
+        "Mozilla",
+        "Open" ],
+        default: ["MIT"],
+        validate: nameInput => {
+            if (nameInput) {
+                return true;
+            } else {
+                console.log('Please choose a license!');
+                return false; 
+            }
+        }
+    },
+    {
+        type: 'input',
+        name: 'install',
+        message: 'What command should be run to install dependencies?',
+        default: 'npm i'
+    },
     
-        } = answers;
-        if (license === "-- Skip --") {
-            license = null;
-            answers.license = null;
+    {
+        type: 'input',
+        name: 'test', 
+        message: 'What command should be run to run tests?',
+        default: 'npm test'
+    },
+    {
+        type: 'input',
+        name: 'usage',
+        message: 'What does the user need to know about using this repo?',
+        validate: nameInput => {
+            if (nameInput) {
+                return true;
+            } else {
+                console.log('Please enter a usage description!');
+                return false; 
+            }
         }
-     let text = "";
-    text += ifAnsweredThenAddText(title, title + "\n====\n");
-    text += ifAnsweredThenAddText(description, "Description\n---\n" + description + "\n\n");
-    text += ifAnsweredThenAddText(installation, "Installation\n---\n" + installation + "\n\n");
-    text += ifAnsweredThenAddText(usage, "Usage\n---\n" + usage + "\n\n");
-    text += ifAnsweredThenAddText(license, "License\n---\n" + getLicenseText(license) + "\n\n");
-    text += addTableofContents();
-    text += ifAnsweredThenAddText(contribution, "Contribution\n---\n" + contribution + "\n\n");
-    text += ifAnsweredThenAddText(tests, "Tests\n---\n" + tests + "\n\n");
-    text += ifAnsweredThenAddText(questions, "Questions\n---\n" + questions + "\n\n");
-    text += ifAnsweredBasicsThenAddText(githubUsername, email);
-
-    // If all questions skipped
-    if (text.length === 0) {
-        console.error("\n\nError: You skipped all questions, so there's no readme to generate.");
-        process.exit(0);
+    },
+    {
+        type: 'input',
+        name: 'contributors',
+        message: 'What does the user need to know about contributing to the repo?'
     }
-
-    // Generate ReadMe file
-    const filename = "Generated-README.md";
-    fs.writeFileSync(filename, text);
-
-    // Show ReadMe text generated in Node JS output
-    console.group("README Generator");
-    console.log(`Generating:\n\n${text}\nFinished.\n\nThe above README generated and written to:\n` + path.join(__dirname, filename) + "\n\n");
-    console.groupEnd();
-
+]);
 };
 
-const catchError = err => {
-    console.log("Error: ", err);
-}
+const writeFile = data => {
+    fs.writeFile('README.md', data, err => {
+        if (err) {
+            console.log(err);
+            return;
 
-// Use Inquirer API that takes your questions, a callback to handle the questions, and a callback to handle errors
-inquirer
-    .prompt(questions)
-    .then(generateReadMe)
-    .catch(catchError);
+        } else {
+            console.log("Your README has been successfully created!")
+        }
+    })
+}; 
+
+// this is the fuction call to get the program started
+questions()
+// getting user answers 
+.then(answers => {
+    return generatePage(answers);
+})
+// using data to display on page 
+.then(data => {
+    return writeFile(data);
+})
+// catching errors 
+.catch(err => {
+    console.log(err)
+})
