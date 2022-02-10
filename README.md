@@ -1,7 +1,7 @@
 # ReadMe Generator
   
   ## Description 
-  It is a node js Readme Generator to help make creating readme's easier
+  It is a node js Readme Generator to help make creating readme's easier. Here is a video recording of me utilizing the read me. https://watch.screencastify.com/v/s8mSBEbIadiv1lfqx08P
   ## Table of Contents
   * [Installation](#installation)
 
@@ -19,13 +19,13 @@
   npm i
 
   ## Usage 
-  Before you start, you must clone the repository and download node js.
+  User needs to have access to Heroku in order to see the programming.
 
   ## License & Copyright
   This project is license under MIT
 
   ## Contributing 
-  Make sure to create issues if they are any and read my license.
+  Feel free to contribute, just make sure to show your work.
 
   ## Tests
   npm test
